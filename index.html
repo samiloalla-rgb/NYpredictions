@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>🎄 Новогодний Оракул 2027 🎄</title>
+<style>
+    /* ===== Базовые сбросы и переменные ===== */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --red-deep: #5a0a14;
+        --red-bright: #c8102e;
+        --gold: #f5c542;
+        --gold-light: #ffe28a;
+        --dark: #0b0205;
+        --dark-soft: #1a0508;
+        --text-light: #fff5e1;
+        --shadow-gold: 0 0 20px rgba(245, 197, 66, 0.4);
+    }
+
+    /* ===== Шрифты ===== */
+    @import url('https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Marck+Script&family=Comfortaa:wght@400;700&display=swap');
+
+    body {
+        font-family: 'Comfortaa', sans-serif;
+        min-height: 100vh;
+        background:
+            radial-gradient(ellipse at top, #3a0810 0%, transparent 60%),
+            radial-gradient(ellipse at bottom, #1a0508 0%, #000 100%),
+            linear-gradient(135deg, #2a0609 0%, #0b0205 50%, #1a0a02 100%);
+        background-attachment: fixed;
+        color: var(--text-light);
+        overflow-x: hidden;
+        position: relative;
+        padding-bottom: 60px;
+    }
+
+    /* ===== Падающие снежинки (декор) ===== */
+    .snowflakes {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        overflow: hidden;
+    }
+
+    .snowflake {
+        position: absolute;
+        top: -10%;
+        color: #fff;
+        font-size: 1em;
+        opacity: 0.8;
+        animation: fall linear infinite;
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.6);
+    }
+
+    @keyframes fall {
+        0% {
+            transform: translateY(0) translateX(0) rotate(0deg);
+            opacity: 0;
+        }
+        10% {
+            opacity: 0.8;
+        }
+        90% {
+            opacity: 0.8;
+        }
+        100% {
+            transform: translateY(110vh) translateX(50px) rotate(360deg);
+            opacity: 0;
+        }
+    }
+
+    /* ===== Основной контейнер ===== */
+    .container {
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 80px 20px 40px;
+        position: relative;
+        z-index: 2;
+    }
+
+    /* ===== Заголовок ===== */
+    header {
+        text-align: center;
+        margin-bottom: 50px;
+        position: relative;
+    }
+
+    .title {
+        font-family: 'Mountains of Christmas', cursive;
+        font-size: clamp(2.2rem, 6vw, 4.5rem);
+        color: var(--gold);
+        text-shadow:
+            0 0 10px rgba(245, 197, 66, 0.6),
+            0 0 25px rgba(245, 197, 66, 0.4),
+            2px 2px 0 #5a0a14;
+        letter-spacing: 2px;
+        animation: glow 3s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+        0%, 100% { text-shadow: 0 0 10px rgba(245, 197, 66, 0.6), 0 0 25px rgba(245, 197, 66, 0.4), 2px 2px 0 #5a0a14; }
+        50% { text-shadow: 0 0 20px rgba(245, 197, 66, 0.9), 0 0 40px rgba(245, 197, 66, 0.6), 2px 2px 0 #5a0a14; }
+    }
+
+    .subtitle {
+        font-family: 'Marck Script', cursive;
+        font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+        color: var(--gold-light);
+        margin-top: 10px;
+        opacity: 0.9;
+    }
+
+    .year-badge {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 8px 28px;
+        font-family: 'Mountains of Christmas', cursive;
+        font-size: clamp(1.5rem, 3vw, 2.2rem);
+        color: var(--dark);
+        background: linear-gradient(135deg, var(--gold-light), var(--gold));
+        border-radius: 50px;
+        box-shadow: var(--shadow-gold), inset 0 -3px 0 rgba(0,0,0,0.15);
+        animation: floatBadge 4s ease-in-out infinite;
+    }
+
+    @keyframes floatBadge {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-6px); }
+    }
+
+    /* ===== Сетка карточек ===== */
+    .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 25px;
+        margin-top: 30px;
+    }
+
+    .card {
+        position: relative;
+        background: linear-gradient(145deg, rgba(245, 197, 66, 0.08), rgba(200, 16, 46, 0.12));
+        border: 2px solid rgba(245, 197, 66, 0.3);
+        border-radius: 20px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    .card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, transparent 30%, rgba(245, 197, 66, 0.15) 50%, transparent 70%);
+        opacity: 0;
+        transition: opacity 0.4s;
+    }
+
+    .card:hover {
+        transform: translateY(-10px) scale(1.03);
+        border-color: var(--gold);
+        box-shadow: 0 15px 40px rgba(245, 197, 66, 0.3), 0 0 30px rgba(200, 16, 46, 0.2);
+    }
+
+    .card:hover::before {
+        opacity: 1;
+    }
+
+    .card:active {
+        transform: translateY(-5px) scale(1.01);
+    }
+
+    /* Контейнер изображения в соотношении 3:4 */
+    .card-image-wrap {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 3 / 4;
+        overflow: hidden;
+        background: linear-gradient(135deg, #2a0609, #0b0205);
+    }
+
+    .card-image-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+    }
+
+    .card:hover .card-image-wrap img {
+        transform: scale(1.08);
+    }
+
+    /* Плейсхолдер, если изображение не загрузилось */
+    .card-image-wrap::after {
+        content: '🎁';
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 4rem;
+        opacity: 0.3;
+        pointer-events: none;
+    }
+
+    .card-info {
+        padding: 18px 15px 22px;
+        text-align: center;
+        background: linear-gradient(180deg, transparent, rgba(0,0,0,0.6));
+    }
+
+    .card-title {
+        font-family: 'Mountains of Christmas', cursive;
+        font-size: 1.6rem;
+        color: var(--gold);
+        margin-bottom: 6px;
+        text-shadow: 0 0 8px rgba(245, 197, 66, 0.4);
+    }
+
+    .card-years {
+        font-size: 0.85rem;
+        color: var(--gold-light);
+        opacity: 0.75;
+        margin-bottom: 10px;
+    }
+
+    .card-hint {
+        font-size: 0.95rem;
+        color: var(--text-light);
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        transition: color 0.3s;
+    }
+
+    .card:hover .card-hint {
+        color: var(--gold-light);
+    }
+
+    .card-arrow {
+        display: inline-block;
+        transition: transform 0.3s;
+    }
+
+    .card:hover .card-arrow {
+        transform: translateY(3px);
+    }
+
+    /* ===== Модальное окно ===== */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.4s, visibility 0.4s;
+        padding: 20px;
+    }
+
+    .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal {
+        position: relative;
+        max-width: 560px;
+        width: 100%;
+        background:
+            radial-gradient(circle at top, rgba(245, 197, 66, 0.15), transparent 60%),
+            linear-gradient(145deg, #2a0609, #0b0205);
+        border: 2px solid var(--gold);
+        border-radius: 25px;
+        padding: 40px 30px;
+        text-align: center;
+        box-shadow: 0 0 50px rgba(245, 197, 66, 0.3), 0 20px 60px rgba(0, 0, 0, 0.7);
+        transform: scale(0.8) translateY(30px);
+        transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        overflow: hidden;
+    }
+
+    .modal-overlay.active .modal {
+        transform: scale(1) translateY(0);
+    }
+
+    /* Декоративные уголки модалки */
+    .modal::before,
+    .modal::after {
+        content: '❄';
+        position: absolute;
+        font-size: 2rem;
+        color: var(--gold);
+        opacity: 0.5;
+        animation: spin 8s linear infinite;
+    }
+    .modal::before { top: 15px; left: 20px; }
+    .modal::after { bottom: 15px; right: 20px; animation-direction: reverse; }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .modal-generation {
+        font-family: 'Mountains of Christmas', cursive;
+        font-size: 2rem;
+        color: var(--gold);
+        margin-bottom: 8px;
+        text-shadow: 0 0 15px rgba(245, 197, 66, 0.5);
+    }
+
+    .modal-emoji {
+        font-size: 3.5rem;
+        margin: 10px 0;
+        animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .prediction-label {
+        font-family: 'Marck Script', cursive;
+        font-size: 1.3rem;
+        color: var(--gold-light);
+        margin-bottom: 15px;
+        opacity: 0.85;
+    }
+
+    .prediction-text {
+        font-size: 1.15rem;
+        line-height: 1.6;
+        color: var(--text-light);
+        margin: 20px 0 30px;
+        min-height: 80px;
+        padding: 0 10px;
+        animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .btn {
+        font-family: 'Comfortaa', sans-serif;
+        font-weight: 700;
+        font-size: 1rem;
+        padding: 14px 25px;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s;
+        letter-spacing: 0.5px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--gold-light), var(--gold));
+        color: var(--dark);
+        box-shadow: 0 5px 20px rgba(245, 197, 66, 0.4);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(245, 197, 66, 0.6);
+    }
+
+    .btn-secondary {
+        background: transparent;
+        color: var(--gold-light);
+        border: 2px solid var(--gold);
+    }
+
+    .btn-secondary:hover {
+        background: rgba(245, 197, 66, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .btn:active {
+        transform: translateY(0);
+    }
+
+    /* Кнопка закрытия модалки */
+    .modal-close {
+        position: absolute;
+        top: 12px;
+        right: 15px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(245, 197, 66, 0.15);
+        color: var(--gold);
+        font-size: 1.3rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-close:hover {
+        background: var(--red-bright);
+        color: white;
+        transform: rotate(90deg);
+    }
+
+    /* ===== Кнопка управления музыкой ===== */
+    .music-toggle {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 2px solid var(--gold);
+        background: linear-gradient(135deg, rgba(90, 10, 20, 0.9), rgba(11, 2, 5, 0.95));
+        color: var(--gold);
+        font-size: 1.6rem;
+        cursor: pointer;
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 20px rgba(245, 197, 66, 0.3), 0 5px 20px rgba(0, 0, 0, 0.5);
+        transition: all 0.3s;
+        backdrop-filter: blur(10px);
+    }
+
+    .music-toggle:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 30px rgba(245, 197, 66, 0.6), 0 8px 25px rgba(0, 0, 0, 0.6);
+        border-color: var(--gold-light);
+    }
+
+    .music-toggle:active {
+        transform: scale(0.95);
+    }
+
+    .music-toggle.muted {
+        opacity: 0.55;
+        border-color: rgba(245, 197, 66, 0.4);
+    }
+
+    .music-toggle .icon {
+        transition: transform 0.3s;
+    }
+
+    .music-toggle.playing .icon {
+        animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.15); }
+    }
+
+    /* ===== Футер ===== */
+    footer {
+        text-align: center;
+        margin-top: 50px;
+        padding: 20px;
+        font-family: 'Marck Script', cursive;
+        font-size: 1.2rem;
+        color: var(--gold-light);
+        opacity: 0.7;
+        position: relative;
+        z-index: 2;
+    }
+
+    /* ===== Адаптивность ===== */
+    @media (max-width: 768px) {
+        .container {
+            padding: 70px 15px 30px;
+        }
+        .cards-grid {
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+        }
+        .card-title {
+            font-size: 1.3rem;
+        }
+        .card-hint {
+            font-size: 0.85rem;
+        }
+        .modal {
+            padding: 35px 20px;
+        }
+        .modal-generation {
+            font-size: 1.6rem;
+        }
+        .prediction-text {
+            font-size: 1rem;
+        }
+        .music-toggle {
+            width: 52px;
+            height: 52px;
+            font-size: 1.3rem;
+            bottom: 18px;
+            right: 18px;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .cards-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+</style>
+</head>
+<body>
+
+<!-- Контейнер для падающих снежинок -->
+<div class="snowflakes" id="snowflakes"></div>
+
+<div class="container">
+    <!-- Заголовок -->
+    <header>
+        <h1 class="title">✨ Новогодний Оракул ✨</h1>
+        <p class="subtitle">Выбери своё поколение — и узнай, что готовит тебе новый год!</p>
+        <div class="year-badge">🎄 2027 🎄</div>
+    </header>
+
+    <!-- Сетка карточек поколений -->
+    <main class="cards-grid" id="cardsGrid">
+        <!-- Карточки генерируются через JavaScript -->
+    </main>
+
+    <footer>
+        🎅 Пусть этот год принесёт тебе радость и волшебство! 🎅
+    </footer>
+</div>
+
+<!-- Модальное окно с предсказанием -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+        <button class="modal-close" id="modalClose" aria-label="Закрыть">✕</button>
+        <div class="modal-emoji" id="modalEmoji">🔮</div>
+        <h2 class="modal-generation" id="modalGeneration">Поколение</h2>
+        <p class="prediction-label">Звёзды шепчут тебе...</p>
+        <p class="prediction-text" id="predictionText">Предсказание появится здесь ✨</p>
+        <div class="modal-buttons">
+            <button class="btn btn-primary" id="btnAnother">🎲 Узнать другое предсказание</button>
+            <button class="btn btn-secondary" id="btnBack">↩ Вернуться к выбору</button>
+        </div>
+    </div>
+</div>
+
+<!-- Кнопка включения/выключения фоновой музыки -->
+<button class="music-toggle muted" id="musicToggle" aria-label="Включить музыку" title="Включить/выключить музыку">
+    <span class="icon">🔇</span>
+</button>
+
+<!-- Фоновая музыка (файл нужно положить рядом: background-music.mp3) -->
+<audio id="bgMusic" loop preload="auto">
+    <source src="background-music.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Звук клика (файл нужно положить рядом: click-sound.mp3) -->
+<audio id="clickSound" preload="auto">
+    <source src="click-sound.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+/* =========================================================
+   ДАННЫЕ: поколения и их предсказания
+   Для каждого поколения — не менее 7 добрых, юмористических
+   и позитивных предсказаний в новогоднем настроении.
+   ========================================================= */
+const generations = [
+    {
+        id: 'boomers',
+        name: 'Boomers',
+        years: '≈ 1946 – 1964',
+        image: 'boomers.png',
+        emoji: '🎄',
+        predictions: [
+            'В новом году внуки будут звонить чаще, чем вы сами — и даже научат вас присылать голосовые!',
+            'На даче наконец-то расцветёт тот самый куст, который вы посадили ещё в прошлом десятилетии.',
+            'Старый друг позвонит неожиданно — и разговор продлится дольше, чем любой сериал.',
+            'В шкафу найдётся вещь, которую вы забыли, а она окажется моднее всех трендов сезона.',
+            'Кто-то из молодых попросит у вас совета — и действительно послушает!',
+            'Новогодний стол получится таким вкусным, что рецепт придётся записывать в семейную книгу.',
+            'Зима подарит тёплый вечер у камина с чашкой какао и хорошим фильмом по телевизору.',
+            'В новом году вы поймёте, что лучший подарок — это время, проведённое с близкими.'
+        ]
+    },
+    {
+        id: 'genx',
+        name: 'Gen X',
+        years: '≈ 1965 – 1980',
+        image: 'gen_x.png',
+        emoji: '📼',
+        predictions: [
+            'В новом году вы наконец-то найдёте ту самую кассету, которую искали с 90-х!',
+            'Отпуск удастся так, что коллеги будут спрашивать рецепт вашего отдыха весь январь.',
+            'Хобби, которое вы откладывали «на потом», превратится в вашу новую суперсилу.',
+            'Вы поймёте, что быть взрослым — это не так страшно, особенно с бокалом чего-нибудь вкусного.',
+            'В гараже или на антресоли найдётся сокровище, о котором вы уже забыли.',
+            'Дети удивят вас чем-то приятным — и вам не придётся это повторять.',
+            'Старый плейлист заиграет как новый — и настроение станет праздничным за одну секунду.',
+            'В новом году баланс между работой и жизнью наконец-то найдётся — и даже с запасом!'
+        ]
+    },
+    {
+        id: 'millennials',
+        name: 'Millennials',
+        years: '≈ 1981 – 1996',
+        image: 'millennials.png',
+        emoji: '☕',
+        predictions: [
+            'В новом году твой пит-стоп за кофе станет началом самого приятного знакомства!',
+            'Удалёнка наконец-то позволит работать в пижаме — и никто даже не заметит.',
+            'Тот самый сериал, который ты откладывал на выходные, окажется лучше всех ожиданий.',
+            'Питомец подарит такой милый момент, что он станет главным мемом в твоём чате.',
+            'Встреча одноклассников всё же состоится — и кто-то даже найдёт в шкафу наряд, купленный специально для этого случая.',
+            'Твой список «надо сделать когда-нибудь» неожиданно сократится — и ты почувствуешь себя героем.',
+            'Путешествие, которое ты планировал год, окажется ещё круче, чем в инстаграме.',
+            'В новом году авокадо-тосты станут ещё вкуснее — проверено звёздами!'
+        ]
+    },
+    {
+        id: 'genz',
+        name: 'Gen Z',
+        years: '≈ 1997 – 2012',
+        image: 'gen_z.png',
+        emoji: '📱',
+        predictions: [
+            'В новом году твой вайб станет таким мощным, что алгоритмы сами будут тебя продвигать!',
+            'Случайный мем в ленте поднимет настроение лучше, чем будильник в понедельник.',
+            'Плейлист, который ты собирал весь год, станет саундтреком к лучшим моментам 2027-го.',
+            'Стрим, на который ты зашёл «на минуточку», превратится в самое уютное онлайн-событие года.',
+            'Твой стиль заметят — и кто-то даже спросит, где ты такой крутой лук нашёл.',
+            'В новом году Wi-Fi будет ловить везде, а зарядка — держаться дольше, чем обещают.',
+            'Случайная встреча в кофейне окажется началом самой интересной истории этого года.',
+            'Твой контент залетит в рекомендации — и ты поймёшь, что был прав насчёт своих идей!'
+        ]
+    },
+    {
+        id: 'genalpha',
+        name: 'Gen Alpha',
+        years: '≈ 2013+',
+        image: 'gen_alpha.png',
+        emoji: '🎮',
+        predictions: [
+            'В твоей коллекции появится самый крутой скин — и твой персонаж будет готов к новогоднему приключению!',
+            'Твой питомец (или плюшевый друг) подарит тебе самый уютный вечер в году.',
+            'В новом году ты научишься чему-то новому так быстро, что удивишь даже себя!',
+            'Семейный праздник получится таким весёлым, что ты будешь вспоминать его весь год.',
+            'В мультике, который ты смотришь, появится новый любимый герой — и он окажется добрым волшебником.',
+            'Твой рисунок или поделка станут главным украшением дома в праздники.',
+            'Друзья предложат такую классную игру, что смеяться вы будете до самого утра.',
+            'В новом году сбудется маленькое желание, о котором ты давно мечтал — и оно окажется ещё круче!'
+        ]
+    }
+];
+
+/* =========================================================
+   ГЕНЕРАЦИЯ КАРТОЧЕК ПОКОЛЕНИЙ
+   ========================================================= */
+const cardsGrid = document.getElementById('cardsGrid');
+
+generations.forEach(gen => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.dataset.id = gen.id;
+    card.innerHTML = `
+        <div class="card-image-wrap">
+            <img src="${gen.image}" alt="${gen.name}" loading="lazy"
+                 onerror="this.style.display='none'">
+        </div>
+        <div class="card-info">
+            <h3 class="card-title">${gen.name}</h3>
+            <p class="card-years">${gen.years}</p>
+            <p class="card-hint">Нажми, чтобы узнать судьбу <span class="card-arrow">↓</span></p>
+        </div>
+    `;
+    // Обработчик клика — открываем модальное окно с предсказанием
+    card.addEventListener('click', () => openPrediction(gen));
+    cardsGrid.appendChild(card);
+});
+
+/* =========================================================
+   ЛОГИКА МОДАЛЬНОГО ОКНА И ПРЕДСКАЗАНИЙ
+   ========================================================= */
+const modalOverlay = document.getElementById('modalOverlay');
+const modalGeneration = document.getElementById('modalGeneration');
+const modalEmoji = document.getElementById('modalEmoji');
+const predictionText = document.getElementById('predictionText');
+const btnAnother = document.getElementById('btnAnother');
+const btnBack = document.getElementById('btnBack');
+const modalClose = document.getElementById('modalClose');
+
+let currentGeneration = null;
+let lastIndex = -1; // Чтобы не повторять предсказание подряд
+
+// Открытие модалки с новым предсказанием
+function openPrediction(gen) {
+    currentGeneration = gen;
+    modalGeneration.textContent = gen.name;
+    modalEmoji.textContent = gen.emoji;
+    showNewPrediction();
+    modalOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Блокируем прокрутку фона
+}
+
+// Показать новое случайное предсказание (не повторяя предыдущее)
+function showNewPrediction() {
+    const preds = currentGeneration.predictions;
+    let idx;
+    if (preds.length <= 1) {
+        idx = 0;
+    } else {
+        do {
+            idx = Math.floor(Math.random() * preds.length);
+        } while (idx === lastIndex);
+    }
+    lastIndex = idx;
+
+    // Анимация смены текста
+    predictionText.style.animation = 'none';
+    // Триггерим reflow для перезапуска анимации
+    void predictionText.offsetWidth;
+    predictionText.style.animation = 'fadeIn 0.6s ease';
+    predictionText.textContent = preds[idx];
+}
+
+// Кнопка «Узнать другое предсказание»
+btnAnother.addEventListener('click', showNewPrediction);
+
+// Кнопка «Вернуться к выбору» и крестик — закрывают модалку
+function closeModal() {
+    modalOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+    currentGeneration = null;
+    lastIndex = -1;
+}
+
+btnBack.addEventListener('click', closeModal);
+modalClose.addEventListener('click', closeModal);
+
+// Закрытие по клику на затемнённый фон
+modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) closeModal();
+});
+
+// Закрытие по клавише Escape
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+/* =========================================================
+   ЗВУКОВОЕ СОПРОВОЖДЕНИЕ
+   ========================================================= */
+
+// Фоновая музыка и звук клика
+const bgMusic = document.getElementById('bgMusic');
+const clickSound = document.getElementById('clickSound');
+const musicToggle = document.getElementById('musicToggle');
+const musicIcon = musicToggle.querySelector('.icon');
+
+// Устанавливаем комфортную громкость фоновой музыки
+bgMusic.volume = 0.4;
+clickSound.volume = 0.7;
+
+// Флаг состояния музыки
+let isMusicPlaying = false;
+
+// Переключение музыки по клику на кнопку
+musicToggle.addEventListener('click', () => {
+    if (isMusicPlaying) {
+        bgMusic.pause();
+        musicToggle.classList.remove('playing');
+        musicToggle.classList.add('muted');
+        musicIcon.textContent = '🔇';
+        musicToggle.setAttribute('aria-label', 'Включить музыку');
+        isMusicPlaying = false;
+    } else {
+        // Пытаемся запустить музыку; если браузер блокирует автоплей — ничего страшного
+        const playPromise = bgMusic.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                musicToggle.classList.add('playing');
+                musicToggle.classList.remove('muted');
+                musicIcon.textContent = '🔊';
+                musicToggle.setAttribute('aria-label', 'Выключить музыку');
+                isMusicPlaying = true;
+            }).catch(err => {
+                console.warn('Браузер заблокировал воспроизведение:', err);
+            });
+        }
+    }
+});
+
+// Проигрывание короткого звука клика
+function playClickSound() {
+    // Сбрасываем на начало, чтобы звук можно было нажимать часто подряд
+    try {
+        clickSound.currentTime = 0;
+        clickSound.play().catch(() => { /* игнорируем ошибки автоплея */ });
+    } catch (e) {
+        // молча пропускаем, если звук не удалось воспроизвести
+    }
+}
+
+// Навешиваем звук клика на все карточки поколений
+document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', playClickSound);
+});
+
+// Навешиваем звук клика на кнопки меню (модалка)
+document.querySelectorAll('.btn, .modal-close').forEach(btn => {
+    btn.addEventListener('click', playClickSound);
+});
+
+/* =========================================================
+   ДЕКОРАТИВНЫЕ ЭФФЕКТЫ: снежинки
+   ========================================================= */
+
+// Генерация падающих снежинок
+const snowContainer = document.getElementById('snowflakes');
+const snowSymbols = ['❄', '❅', '❆', '✦', '✧'];
+const snowCount = window.innerWidth < 600 ? 25 : 50;
+
+for (let i = 0; i < snowCount; i++) {
+    const flake = document.createElement('div');
+    flake.className = 'snowflake';
+    flake.textContent = snowSymbols[Math.floor(Math.random() * snowSymbols.length)];
+    flake.style.left = Math.random() * 100 + '%';
+    flake.style.fontSize = (Math.random() * 1.2 + 0.6) + 'em';
+    flake.style.animationDuration = (Math.random() * 10 + 8) + 's';
+    flake.style.animationDelay = (Math.random() * 10) + 's';
+    flake.style.opacity = (Math.random() * 0.6 + 0.3).toFixed(2);
+    snowContainer.appendChild(flake);
+}
+</script>
+
+</body>
+</html>
